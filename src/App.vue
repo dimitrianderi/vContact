@@ -13,8 +13,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .page {
   padding: 20px;
 }
 </style>
+

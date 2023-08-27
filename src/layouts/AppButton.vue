@@ -8,7 +8,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .btn {
   padding: 5px 10px;
   background-color: var(--main-color);
@@ -18,12 +18,13 @@ export default {
   cursor: pointer;
   margin-right: 10px;
   transition: background-color .2s ease;
-}
-.btn:last-child {
-  margin-right: 0;
-}
 
-.btn:hover {
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
     background-color: var(--btn-hover-color);
+  }
 }
 </style>

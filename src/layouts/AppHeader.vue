@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .header {
   width: 100%;
   display: flex;
@@ -34,15 +34,15 @@ export default {
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--dark-color);
-}
 
-.logo {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--main-color);
-}
+  .logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--main-color);
+  }
 
-.auth-buttons {
-  display: flex;
+  .auth-buttons {
+    display: flex;
+  }
 }
 </style>
