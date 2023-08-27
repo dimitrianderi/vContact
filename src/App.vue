@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
 import AppHeader from './layouts/AppHeader.vue'
 import AppModal from './layouts/AppModalWindow.vue'
 

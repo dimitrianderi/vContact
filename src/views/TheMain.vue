@@ -9,6 +9,7 @@ import TheTable from '../components/TheTable.vue'
 
 export default {
   components: { TheControls, TheTable },
+  name: 'Main'
 }
 </script>
 

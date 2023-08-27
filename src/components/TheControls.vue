@@ -2,55 +2,42 @@
   <div class="controls">
     <div class="group-control">
       <div class="search-filter">
-        <input type="text" :placeholder="search" class="search-filter__input" />
+        <input type="text" placeholder="Поиск" class="search-filter__input" />
       </div>
-      <label class="group-label">{{ group }}:</label>
+      <label class="group-label">Группировка:</label>
       <select class="group-select">
-        <option value="all">{{ options.all }}</option>
-        <option value="friends">{{ options.friends }}</option>
-        <option value="colleagues">{{ options.colleagues }}</option>
-        <option value="family">{{ options.family }}</option>
+        <option value="all">Все</option>
+        <option value="friends">Друзья</option>
+        <option value="colleagues">Коллеги</option>
+        <option value="family">Семья</option>
       </select>
     </div>
-    <app-button :text="add_user" @toggle="toggleModal"></app-button>
+    <app-button text="Добавить контакт" @toggle="() => toggleModal('New')"></app-button>
   </div>
-  <teleport to="body"
-    ><app-modal v-if="isOpenModal">
-        <the-form-new @close="toggleModal"></the-form-new>
-    </app-modal
-  ></teleport>
+  <app-pupup v-if="isOpenModal" :postfix="postfix" @close="toggleModal('')"></app-pupup>
 </template>
 
 <script lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import AppModal from '../layouts/AppModalWindow.vue'
 import AppButton from '../layouts/AppButton.vue'
 import TheFormNew from './TheFormNew.vue'
+import AppPupup from '../layouts/AppPupup.vue'
 
 export default {
-  components: { AppModal, AppButton, TheFormNew },
+  components: { AppModal, AppButton, TheFormNew, AppPupup },
   setup() {
     const isOpenModal = ref(false)
-    const group = ref('Группировка')
-    const add_user = ref('Добавить участника')
-    const search = ref('Поиск')
-    const options = reactive({
-      all: 'Все',
-      friends: 'Друзья',
-      colleagues: 'Коллега',
-      family: 'Семья',
-    })
+    const postfix = ref('')
 
-    const toggleModal = () => {
+    const toggleModal = (value: string) => {
       isOpenModal.value = !isOpenModal.value
+      postfix.value = value
     }
 
     return {
       isOpenModal,
-      options,
-      group,
-      add_user,
-      search,
+      postfix,
       toggleModal,
     }
   },

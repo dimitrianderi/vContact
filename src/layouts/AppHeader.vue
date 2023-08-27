@@ -1,10 +1,17 @@
 <template>
   <header class="header">
-    <h1 class="logo">{{ title }}</h1>
+    <h1 class="logo">vContact</h1>
     <div class="auth-buttons">
-      <app-button text="Вход"></app-button>
-      <app-button text="Регистрация"></app-button>
-      <app-button text="Выход"></app-button>
+      <router-link to="auth">
+        <app-button text="Вход" v-if="!$store.getters.isAuth"></app-button>
+      </router-link>
+      <router-link to="reg">
+        <app-button
+          text="Регистрация"
+          v-if="!$store.getters.isAuth"
+        ></app-button>
+      </router-link>
+      <app-button text="Выход" v-if="$store.getters.isAuth"></app-button>
     </div>
   </header>
 </template>
@@ -43,6 +50,14 @@ export default {
 
   .auth-buttons {
     display: flex;
+
+    a {
+      margin: 0 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
 }
 </style>
