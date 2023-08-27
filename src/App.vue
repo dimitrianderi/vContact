@@ -1,14 +1,20 @@
 <template>
-  <h2></h2>
+  <div class="page">
+    <app-header></app-header>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
-export default {
-  setup() {
+import AppHeader from './layouts/AppHeader.vue'
 
-  }
+export default {
+  components: { AppHeader },
 }
 </script>
 
-<style></style>
+<style>
+.page {
+  padding: 20px;
+}
+</style>
