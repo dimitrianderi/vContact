@@ -1,17 +1,12 @@
 <template>
   <div class="modal-container">
-    <div class="modal-overlay" @click="$emit('toggle')"></div>
-    <div class="modal-content">
-      <slot></slot>
-    </div>
+    <div class="modal-overlay"></div>
+    <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
-
-export default {
-}
-
+export default {}
 </script>
 
 <style lang="scss" scoped>
@@ -33,7 +28,7 @@ export default {
     width: 100%;
     height: 100%;
     background-color: var(--black-color);
-    opacity: .5;
+    opacity: 0.5;
     z-index: -1;
   }
 

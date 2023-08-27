@@ -15,7 +15,9 @@
     <app-button :text="add_user" @toggle="toggleModal"></app-button>
   </div>
   <teleport to="body"
-    ><app-modal v-if="isOpenModal" @toggle="isOpenModal = false"></app-modal
+    ><app-modal v-if="isOpenModal">
+        <the-form-new @close="toggleModal"></the-form-new>
+    </app-modal
   ></teleport>
 </template>
 
@@ -23,9 +25,10 @@
 import { ref, reactive } from 'vue'
 import AppModal from '../layouts/AppModalWindow.vue'
 import AppButton from '../layouts/AppButton.vue'
+import TheFormNew from './TheFormNew.vue'
 
 export default {
-  components: { AppModal, AppButton },
+  components: { AppModal, AppButton, TheFormNew },
   setup() {
     const isOpenModal = ref(false)
     const group = ref('Группировка')
@@ -39,7 +42,7 @@ export default {
     })
 
     const toggleModal = () => {
-      isOpenModal.value = true
+      isOpenModal.value = !isOpenModal.value
     }
 
     return {
