@@ -1,10 +1,11 @@
 <template>
-  <button class="btn">{{ text }}</button>
+  <button class="btn" @click="$emit('toggle')">{{ text }}</button>
 </template>
 
 <script lang="ts">
 export default {
-    props: ['text']
+    props: ['text'],
+    emits: ['toggle']
 }
 </script>
 
