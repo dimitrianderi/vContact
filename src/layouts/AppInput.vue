@@ -1,7 +1,7 @@
 <template>
   <div>
     <label :for="label_for" class="form-label">{{ label }}</label>
-    <input :type="type_input" class="form-control" :id="label_for" :value="modelValue" @input="change" max="25" required/>
+    <input :type="type_input" class="form-control" :id="label_for" :value="modelValue" @input="change" maxlength="25" minlength="3" required/>
   </div>
 </template>
 

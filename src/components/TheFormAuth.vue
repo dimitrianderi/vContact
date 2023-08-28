@@ -9,7 +9,7 @@
         <h5 class="modal-title">Авторизация</h5>
       </div>
 
-      <form class="modal-form">
+      <form class="modal-form" @keydown.enter.prevent="login">
         <app-input
           for="email"
           label="Email"

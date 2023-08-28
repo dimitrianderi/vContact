@@ -9,7 +9,7 @@
         <h5 class="modal-title">Регистрация</h5>
       </div>
 
-      <form class="modal-form">
+      <form class="modal-form" @keydown.enter.prevent="submit">
         <app-input
           label_for="name"
           label="Имя"

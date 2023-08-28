@@ -7,7 +7,7 @@
       <h5 class="modal-title">Добавление контакта</h5>
     </div>
 
-    <form class="modal-form">
+    <form class="modal-form" @keydown.enter.prevent="addNewContact">
       <app-input
         for="name"
         label="Имя"
