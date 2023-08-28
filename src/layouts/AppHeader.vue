@@ -1,6 +1,9 @@
 <template>
   <header class="header">
     <h1 class="logo">vContact</h1>
+    <span v-if="$store.getters.isAuth" class="greeting"
+      >Здравствуйте, {{ $store.getters.isAuth }}!</span
+    >
     <div class="auth-buttons">
       <router-link to="auth">
         <app-button text="Вход" v-if="!$store.getters.isAuth"></app-button>
@@ -11,30 +14,34 @@
           v-if="!$store.getters.isAuth"
         ></app-button>
       </router-link>
-      <app-button text="Выход" v-if="$store.getters.isAuth" @toggle="logout"></app-button>
+      <app-button
+        text="Выход"
+        v-if="$store.getters.isAuth"
+        @toggle="logout"
+      ></app-button>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import AppButton from './AppButton.vue'
 
 export default {
   components: { AppButton },
   setup() {
-    const store = useStore();
-    const router = useRouter();
+    const store = useStore()
+    const router = useRouter()
 
     const logout = () => {
       store.commit('toggleAuth')
       router.push('auth')
+      window.location.reload();
     }
 
     return {
-      logout
+      logout,
     }
   },
 }
@@ -66,6 +73,11 @@ export default {
         margin-right: 0;
       }
     }
+  }
+  .greeting {
+    font-size: 18px;
+    color: var(--main-color);
+    margin-left: 10px;
   }
 }
 </style>

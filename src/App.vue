@@ -8,9 +8,13 @@
 <script lang="ts">
 import AppHeader from './layouts/AppHeader.vue'
 import AppModal from './layouts/AppModalWindow.vue'
+import store from './store';
 
 export default {
   components: { AppHeader, AppModal },
+  mounted () {
+    store.dispatch('get');
+  }
 }
 </script>
 
