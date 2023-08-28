@@ -1,7 +1,7 @@
 <template>
   <div>
     <label :for="label_for" class="form-label">{{ label }}</label>
-    <input :type="type_input" class="form-control" :id="label_for" :value="modelValue" @input="change"/>
+    <input :type="type_input" class="form-control" :id="label_for" :value="modelValue" @input="change" max="25" required/>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
   props: ['modelValue', 'label_for', 'label', 'type_input'],
   emits: ['update:modelValue'],
 
-  setup (props, { emit }) {
+  setup (_, { emit }) {
     const change = (e: Event) => {
       emit('update:modelValue', (e.target as HTMLInputElement).value)
     }

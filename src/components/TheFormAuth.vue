@@ -38,9 +38,10 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import AppInput from '../layouts/AppInput.vue'
 import AppButton from '../layouts/AppButton.vue'
+import AppLoader from '../layouts/AppLoader.vue'
 
 export default {
-  components: { AppInput, AppButton },
+  components: { AppInput, AppButton, AppLoader },
   name: 'AuthForm',
   setup() {
     const store = useStore()
@@ -61,8 +62,6 @@ export default {
       } else {
         router.push('main')
       }
-
-      router.push('main')
       isLoader.value = false
     }
 

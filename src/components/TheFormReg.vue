@@ -57,6 +57,7 @@ export default {
       name: '',
       email: '',
       pass: '',
+      contacts: []
     })
     const isLoader = ref(false)
     const message = ref('')

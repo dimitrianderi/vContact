@@ -6,6 +6,7 @@ export default createStore({
     auth: localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')!) : null,
     message: null,
     data: [],
+    contacts: localStorage.getItem('contacts') ? JSON.parse(localStorage.getItem('contacts')!) : [],
   },
   getters: {
     auth(state: State) {
@@ -17,6 +18,20 @@ export default createStore({
   },
   mutations: {
     toggleAuth(state: State, data: Data | null = null) {
+      const arr: any = data?.contacts
+
+      if (arr) {
+        const contacts = Object.keys(arr).map((key) => {
+          return {
+            id: key,
+            ...arr[key],
+          }
+        })
+
+        state.contacts = contacts
+        localStorage.setItem('contacts', JSON.stringify(state.contacts))
+      }
+
       state.auth = data
       localStorage.setItem('auth', JSON.stringify(state.auth))
     },
@@ -26,7 +41,30 @@ export default createStore({
 
     setData(state: State, arr: Data[]) {
       state.data = arr
+    },
+
+    setNewContact(state: State, data: Contact) {
+      state.contacts.push(data)
+      localStorage.setItem('contacts', JSON.stringify(state.contacts))
+    },
+
+    deleteContact(state: State, id: string) {
+      const indexToDelete = state.contacts.findIndex(contact => contact.id === id);
+      if (indexToDelete !== -1) {
+        state.contacts.splice(indexToDelete, 1);
+        localStorage.setItem('contacts', JSON.stringify(state.contacts));
+      }
+    },
+
+    editContact(state: State, contact: Contact) {
+      const idxOldContact = state.contacts.findIndex(old_contact => old_contact.id === contact.id);
+
+      if (idxOldContact !== -1) {
+        state.contacts[idxOldContact] = contact;
+        localStorage.setItem('contacts', JSON.stringify(state.contacts));
+      }
     }
+
   },
   actions: {
     async post(contex, data: Data) {
@@ -36,7 +74,7 @@ export default createStore({
           throw new Error('Такой email уже зарегистрирован')
         }
 
-        await axios.post(
+        const res = await axios.post(
           `https://vu-names-default-rtdb.firebaseio.com/users.json`,
           data,
           {
@@ -45,6 +83,8 @@ export default createStore({
             },
           }
         )
+        const id = res.data.name
+        data = { ...data, id }
         this.commit('toggleAuth', data)
       } catch (err: any) {
         this.commit('setMessage', err.message)
@@ -68,17 +108,68 @@ export default createStore({
       }
     },
 
+    async delete(contex, id: string) {
+      const current_id_user = contex.state.auth?.id
+      try {
+        await axios.delete(`https://vu-names-default-rtdb.firebaseio.com/users/${current_id_user}/contacts/${id}.json`)
+
+        this.commit('deleteContact', id)
+      } catch (err: any) {
+        this.commit('setMessage', "Не удалось удалить")
+      }
+    },
+
     auth(contex, dataAuth: DataAuth) {
       const user = contex.state.data.find(obj => obj.email === dataAuth.email);
 
-      if (user) {
-        if (user.pass === dataAuth.pass) {
-          this.commit('toggleAuth', user)
-        } else {
-          this.commit('setMessage', "Пароль не подходит")
-        }
+      if (!user) {
+        this.commit('setMessage', "Такой пользователь не зарегистрирован");
+        return;
+      }
+
+      if (user.pass === dataAuth.pass) {
+        this.commit('toggleAuth', user);
       } else {
-        this.commit('setMessage', "Такой пользователь не зарегистрирован")
+        this.commit('setMessage', "Пароль не подходит");
+      }
+    },
+
+    async addNewContact(contex, data: Data) {
+      const current_id_user = contex.state.auth?.id
+      try {
+        const res = await axios.post(
+          `https://vu-names-default-rtdb.firebaseio.com/users/${current_id_user}/contacts.json`,
+          data,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        const id = res.data.name
+        data = { ...data, id }
+        this.commit('setNewContact', data)
+      } catch (err: any) {
+        this.commit('setMessage', err.message)
+      }
+    },
+
+    async editContact(contex, contact: Contact) {
+      const current_id_user = contex.state.auth?.id
+      try {
+        const res = await axios.put(
+          `https://vu-names-default-rtdb.firebaseio.com/users/${current_id_user}/contacts/${contact.id}.json`,
+          contact,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+
+        this.commit('editContact', contact)
+      } catch (err: any) {
+        this.commit('setMessage', err.message)
       }
     }
   },
@@ -87,13 +178,24 @@ export default createStore({
 interface State {
   auth: Data | null;
   message: string | null;
-  data: Data[]
+  data: Data[],
+  contacts: Contact[]
 }
 
 interface Data {
   name: string,
   email: string,
-  pass: string
+  pass: string,
+  id?: string,
+  contacts: Contact[]
+}
+
+export interface Contact {
+  email: string,
+  id: string,
+  name: string,
+  phone: string,
+  tags: string[],
 }
 
 interface DataAuth {

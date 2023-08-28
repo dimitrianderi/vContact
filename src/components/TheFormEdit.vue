@@ -4,7 +4,7 @@
   </teleport>
   <div class="modal-content">
     <div class="modal-header">
-      <h5 class="modal-title">Добавление контакта</h5>
+      <h5 class="modal-title">Редактирование контакта</h5>
     </div>
 
     <form class="modal-form">
@@ -44,7 +44,7 @@
 
     <div class="modal-footer">
       <app-button text="Закрыть" @toggle="$emit('close')"></app-button>
-      <app-button text="Добавить" @toggle="addNewContact"></app-button>
+      <app-button text="Сохранить" @toggle="editContact"></app-button>
     </div>
   </div>
 </template>
@@ -58,22 +58,27 @@ import AppLoader from '../layouts/AppLoader.vue'
 
 export default {
   components: { AppInput, AppButton, AppLoader },
-  setup(_, { emit }) {
+  emits: ['close'],
+  props: ['contact'],
+  setup(props, { emit }) {
     const store = useStore()
     const tags = ref(['Семья', 'Друзья', 'Коллеги'])
     const isLoader = ref(false)
     const message = ref(null)
+    const changeContact = {...props.contact}
+
     const data = reactive({
-      name: '',
-      phone: '',
-      email: '',
-      tags: [],
+      id: changeContact.id,
+      name: changeContact.name,
+      phone: changeContact.phone,
+      email: changeContact.email,
+      tags: changeContact.tags,
     })
 
-    const addNewContact = async () => {
+    const editContact = async () => {
       isLoader.value = true
       store.state.message = null
-      await store.dispatch('addNewContact', data)
+      await store.dispatch('editContact', data)
       if (store.getters.message) {
         message.value = store.getters.message
       } else {
@@ -87,7 +92,7 @@ export default {
       data,
       message,
       isLoader,
-      addNewContact,
+      editContact,
     }
   },
 }
