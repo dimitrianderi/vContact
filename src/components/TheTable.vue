@@ -20,6 +20,14 @@
           <td>{{ contact.email }}</td>
           <td>{{ contact.tags.join(', ') }}</td>
           <td class="actions">
+            <router-link
+              :to="{
+                name: 'Contact',
+                params: { id: contact.id },
+              }"
+            >
+              <app-button text="Открыть"></app-button>
+            </router-link>
             <app-button
               text="Редактировать"
               @toggle="toggleModal('Edit', contact)"
@@ -50,7 +58,7 @@ import { useStore } from 'vuex'
 import AppButton from '../layouts/AppButton.vue'
 import AppLoader from '../layouts/AppLoader.vue'
 import AppPupup from '../layouts/AppPupup.vue'
-import type { Contact } from './../store';
+import type { Contact } from './../store'
 
 export default {
   components: { AppButton, AppLoader, AppPupup },
@@ -74,7 +82,7 @@ export default {
     }
 
     const toggleModal = (value: string, contact: Contact | null = null) => {
-      data.value = {...contact}
+      data.value = { ...contact }
       isOpenModal.value = !isOpenModal.value
       postfix.value = value
     }
@@ -123,6 +131,10 @@ export default {
       &:hover {
         background-color: var(--table-row-hover-color);
       }
+    }
+
+    a {
+      margin-right: 10px;
     }
   }
   .contacts-text {

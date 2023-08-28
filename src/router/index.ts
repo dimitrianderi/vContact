@@ -3,6 +3,7 @@ import TheMain from '@/views/TheMain.vue';
 import TheAuth from '@/views/TheAuth.vue';
 import TheAuthForm from '@/components/TheFormAuth.vue';
 import TheRegForm from '@/components/TheFormReg.vue';
+import TheContact from '@/views/TheContact.vue';
 import store from './../store'
 
 const isAuthenticated = store.getters.auth;
@@ -39,6 +40,12 @@ const router = createRouter({
       path: '/main',
       name: 'Main',
       component: TheMain,
+    },
+    {
+      path: '/contact/:id',
+      name: 'Contact',
+      component: TheContact,
+      props: true
     },
     { path: '/:error(.*)', redirect: '/' },
   ]
