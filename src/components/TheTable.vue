@@ -13,7 +13,7 @@
           <th>Действия</th>
         </tr>
       </thead>
-      <tbody v-if="contacts.length">
+      <tbody v-if="filteredContacts.length">
         <tr v-for="contact in filteredContacts" :key="contact.id">
           <td>{{ contact.name }}</td>
           <td>{{ contact.phone }}</td>
@@ -40,8 +40,8 @@
         </tr>
       </tbody>
     </table>
-    <div class="contacts-text" v-if="!contacts.length">
-      <span>Контактов ещё нет</span>
+    <div class="contacts-text" v-if="!filteredContacts.length">
+      <span>Контактов нет</span>
     </div>
   </div>
   <app-pupup
