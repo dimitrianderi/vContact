@@ -5,30 +5,57 @@
     </div>
 
     <form class="modal-form">
-      <app-input for="name" label="Имя" type-input="text"></app-input>
-      <app-input for="email" label="Email" type-input="email"></app-input>
-      <app-input for="pass" label="Пароль" type-input="password"></app-input>
+      <app-input
+        label_for="name"
+        label="Имя"
+        type-input="text"
+        v-model="data.name"
+      ></app-input>
+      <app-input
+        label_for="email"
+        label="Email"
+        type-input="email"
+        v-model="data.email"
+      ></app-input>
+      <app-input
+        label_for="pass"
+        label="Пароль"
+        type_input="password"
+        v-model="data.pass"
+      ></app-input>
     </form>
 
     <div class="modal-footer">
-      <app-button text="Зарегистрироваться"></app-button>
+      <app-button text="Зарегистрироваться" @toggle="submit"></app-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
+import { useStore } from 'vuex';
 import AppInput from '../layouts/AppInput.vue'
 import AppButton from '../layouts/AppButton.vue'
 
 export default {
   components: { AppInput, AppButton },
   name: 'RegForm',
+
   setup() {
-    const tags = ref(['Семья', 'Друзья', 'Коллеги'])
+    const store = useStore();
+    const data = reactive({
+      name: '',
+      email: '',
+      pass: '',
+    })
+
+    const submit = async () => {
+      store.dispatch('post', data)
+    }
 
     return {
-      tags,
+      data,
+      submit,
     }
   },
 }
@@ -69,7 +96,6 @@ export default {
       margin-top: 0.2rem;
     }
   }
-
   .modal-footer {
     background-color: var(--dark-color);
     border-radius: 0 0 8px 8px;

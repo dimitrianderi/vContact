@@ -11,22 +11,30 @@
           v-if="!$store.getters.isAuth"
         ></app-button>
       </router-link>
-      <app-button text="Выход" v-if="$store.getters.isAuth"></app-button>
+      <app-button text="Выход" v-if="$store.getters.isAuth" @toggle="logout"></app-button>
     </div>
   </header>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import AppButton from './AppButton.vue'
 
 export default {
   components: { AppButton },
   setup() {
-    const title = ref('vContact')
+    const store = useStore();
+    const router = useRouter();
+
+    const logout = () => {
+      store.commit('toggleAuth')
+      router.push('auth')
+    }
 
     return {
-      title,
+      logout
     }
   },
 }

@@ -45,6 +45,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters.isAuth;
   if (to.name === 'Main' || to.name === 'Contact') {
     if (isAuthenticated) {
       next()
@@ -58,7 +59,6 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }
-
 });
 
 export default router

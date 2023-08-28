@@ -10,7 +10,7 @@
     </form>
     
     <div class="modal-footer">
-      <app-button text="Войти"></app-button>
+      <app-button text="Войти"  @toggle="login"></app-button>
     </div>
   </div>
   
@@ -18,6 +18,8 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import AppInput from '../layouts/AppInput.vue'
 import AppButton from '../layouts/AppButton.vue'
 
@@ -25,10 +27,18 @@ export default {
   components: { AppInput, AppButton },
   name: 'AuthForm',
   setup() {
+    const store = useStore();
+    const router = useRouter();
     const tags = ref(['Семья', 'Друзья', 'Коллеги'])
+
+    const login = () => {
+      store.commit('toggleAuth')
+      router.push('main')
+    }
 
     return {
       tags,
+      login
     }
   },
 }

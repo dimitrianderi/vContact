@@ -1,13 +1,24 @@
 <template>
   <div>
-    <label :for="name" class="form-label">{{ label }}</label>
-    <input :type="type - input" class="form-control" :id="name" />
+    <label :for="label_for" class="form-label">{{ label }}</label>
+    <input :type="type_input" class="form-control" :id="label_for" :value="modelValue" @input="change"/>
   </div>
 </template>
 
 <script lang="ts">
 export default {
-  props: ['for', 'label', 'type-input'],
+  props: ['modelValue', 'label_for', 'label', 'type_input'],
+  emits: ['update:modelValue'],
+
+  setup (props, { emit }) {
+    const change = (e: Event) => {
+      emit('update:modelValue', (e.target as HTMLInputElement).value)
+    }
+
+    return {
+      change
+    }
+  }
 }
 </script>
 
