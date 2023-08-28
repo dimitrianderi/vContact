@@ -3,22 +3,22 @@ import axios from 'axios'
 
 export default createStore({
   state: {
-    isAuth: localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')!) : null,
+    auth: localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')!) : null,
     message: null,
     data: [],
   },
   getters: {
-    isAuth(state: State) {
-      return state.isAuth
+    auth(state: State) {
+      return state.auth
     },
     message(state: State) {
       return state.message
     }
   },
   mutations: {
-    toggleAuth(state: State, name: string | null = null) {
-      state.isAuth = name
-      localStorage.setItem('auth', JSON.stringify(state.isAuth))
+    toggleAuth(state: State, data: Data | null = null) {
+      state.auth = data
+      localStorage.setItem('auth', JSON.stringify(state.auth))
     },
     setMessage(state: State, text: string) {
       state.message = text
@@ -26,7 +26,6 @@ export default createStore({
 
     setData(state: State, arr: Data[]) {
       state.data = arr
-      console.log(arr)
     }
   },
   actions: {
@@ -46,7 +45,7 @@ export default createStore({
             },
           }
         )
-        this.commit('toggleAuth', data.name)
+        this.commit('toggleAuth', data)
       } catch (err: any) {
         this.commit('setMessage', err.message)
       }
@@ -67,18 +66,37 @@ export default createStore({
       } catch (err: any) {
         this.commit('setMessage', "Не удалось загрузить данные")
       }
+    },
+
+    auth(contex, dataAuth: DataAuth) {
+      const user = contex.state.data.find(obj => obj.email === dataAuth.email);
+
+      if (user) {
+        if (user.pass === dataAuth.pass) {
+          this.commit('toggleAuth', user)
+        } else {
+          this.commit('setMessage', "Пароль не подходит")
+        }
+      } else {
+        this.commit('setMessage', "Такой пользователь не зарегистрирован")
+      }
     }
   },
 });
 
 interface State {
-  isAuth: string | null;
+  auth: Data | null;
   message: string | null;
   data: Data[]
 }
 
 interface Data {
   name: string,
+  email: string,
+  pass: string
+}
+
+interface DataAuth {
   email: string,
   pass: string
 }

@@ -1,22 +1,22 @@
 <template>
   <header class="header">
     <h1 class="logo">vContact</h1>
-    <span v-if="$store.getters.isAuth" class="greeting"
-      >Здравствуйте, {{ $store.getters.isAuth }}!</span
+    <span v-if="$store.getters.auth" class="greeting"
+      >Здравствуйте, {{ $store.getters.auth.name }}!</span
     >
     <div class="auth-buttons">
       <router-link to="auth">
-        <app-button text="Вход" v-if="!$store.getters.isAuth"></app-button>
+        <app-button text="Вход" v-if="!$store.getters.auth"></app-button>
       </router-link>
       <router-link to="reg">
         <app-button
           text="Регистрация"
-          v-if="!$store.getters.isAuth"
+          v-if="!$store.getters.auth"
         ></app-button>
       </router-link>
       <app-button
         text="Выход"
-        v-if="$store.getters.isAuth"
+        v-if="$store.getters.auth"
         @toggle="logout"
       ></app-button>
     </div>

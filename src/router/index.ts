@@ -5,7 +5,7 @@ import TheAuthForm from '@/components/TheFormAuth.vue';
 import TheRegForm from '@/components/TheFormReg.vue';
 import store from './../store'
 
-const isAuthenticated = store.getters.isAuth;
+const isAuthenticated = store.getters.auth;
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,7 +45,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = store.getters.isAuth;
+  const isAuthenticated = store.getters.auth;
   if (to.name === 'Main' || to.name === 'Contact') {
     if (isAuthenticated) {
       next()
