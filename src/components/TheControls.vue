@@ -5,20 +5,26 @@
         <input type="text" placeholder="Поиск" class="search-filter__input" />
       </div>
       <label class="group-label">Группировка:</label>
-      <select class="group-select">
+      <select class="group-select" v-model="activeTag" @change="changeTag">
         <option value="all">Все</option>
-        <option value="friends">Друзья</option>
-        <option value="colleagues">Коллеги</option>
-        <option value="family">Семья</option>
+        <option :value="tagValue" v-for="tagValue in tags" :key="tagValue">{{ tagValue }}</option>
       </select>
     </div>
-    <app-button text="Добавить контакт" @toggle="() => toggleModal('New')"></app-button>
+    <app-button
+      text="Добавить контакт"
+      @toggle="() => toggleModal('New')"
+    ></app-button>
   </div>
-  <app-pupup v-if="isOpenModal" :postfix="postfix" @close="toggleModal('')"></app-pupup>
+  <app-pupup
+    v-if="isOpenModal"
+    :postfix="postfix"
+    @close="toggleModal('')"
+  ></app-pupup>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 import AppModal from '../layouts/AppModalWindow.vue'
 import AppButton from '../layouts/AppButton.vue'
 import TheFormNew from './TheFormNew.vue'
@@ -29,16 +35,26 @@ export default {
   setup() {
     const isOpenModal = ref(false)
     const postfix = ref('')
+    const activeTag = ref('all')
+    const store = useStore()
+    const tags = ref(['Друзья', 'Коллеги', 'Семья'])
 
     const toggleModal = (value: string) => {
       isOpenModal.value = !isOpenModal.value
       postfix.value = value
     }
 
+    const changeTag = () => {
+      store.state.activeTag = activeTag.value
+    }
+
     return {
       isOpenModal,
       postfix,
+      activeTag,
+      tags,
       toggleModal,
+      changeTag,
     }
   },
 }

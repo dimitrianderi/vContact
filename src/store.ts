@@ -7,7 +7,9 @@ export default createStore({
     message: null,
     data: [],
     contacts: localStorage.getItem('contacts') ? JSON.parse(localStorage.getItem('contacts')!) : [],
+    activeTag: 'all'
   },
+
   getters: {
     auth(state: State) {
       return state.auth
@@ -16,6 +18,7 @@ export default createStore({
       return state.message
     }
   },
+
   mutations: {
     toggleAuth(state: State, data: Data | null = null) {
       const arr: any = data?.contacts
@@ -179,7 +182,8 @@ interface State {
   auth: Data | null;
   message: string | null;
   data: Data[],
-  contacts: Contact[]
+  contacts: Contact[],
+  activeTag: string
 }
 
 interface Data {

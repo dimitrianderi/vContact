@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody v-if="contacts.length">
-        <tr v-for="contact in contacts" :key="contact.id">
+        <tr v-for="contact in contactsFilterTag" :key="contact.id">
           <td>{{ contact.name }}</td>
           <td>{{ contact.phone }}</td>
           <td>{{ contact.email }}</td>
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import AppButton from '../layouts/AppButton.vue'
 import AppLoader from '../layouts/AppLoader.vue'
@@ -87,6 +87,17 @@ export default {
       postfix.value = value
     }
 
+    const contactsFilterTag = computed(() => {
+
+      if (store.state.activeTag === 'all') {
+        return contacts
+      } else {
+        return contacts.filter((el: Contact) =>
+          el.tags.includes(store.state.activeTag)
+        )
+      }
+    })
+
     return {
       contacts,
       isLoader,
@@ -96,6 +107,7 @@ export default {
       data,
       deleteContact,
       toggleModal,
+      contactsFilterTag,
     }
   },
 }
