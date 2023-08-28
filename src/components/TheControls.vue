@@ -2,9 +2,9 @@
   <div class="controls">
     <div class="group-control">
       <div class="search-filter">
-        <input type="text" placeholder="Поиск" class="search-filter__input" />
+        <input type="text" placeholder="Поиск" class="search-filter__input" v-model="searchValue" @input="changeSearchValue"/>
       </div>
-      <label class="group-label">Группировка:</label>
+      <label class="group-label">Фильтрация:</label>
       <select class="group-select" v-model="activeTag" @change="changeTag">
         <option value="all">Все</option>
         <option :value="tagValue" v-for="tagValue in tags" :key="tagValue">{{ tagValue }}</option>
@@ -36,6 +36,7 @@ export default {
     const isOpenModal = ref(false)
     const postfix = ref('')
     const activeTag = ref('all')
+    const searchValue = ref('')
     const store = useStore()
     const tags = ref(['Друзья', 'Коллеги', 'Семья'])
 
@@ -48,13 +49,19 @@ export default {
       store.state.activeTag = activeTag.value
     }
 
+    const changeSearchValue = () => {
+      store.state.searchValue = searchValue.value
+    }
+
     return {
       isOpenModal,
       postfix,
       activeTag,
       tags,
+      searchValue,
       toggleModal,
       changeTag,
+      changeSearchValue
     }
   },
 }

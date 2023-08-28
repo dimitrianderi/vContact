@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody v-if="contacts.length">
-        <tr v-for="contact in contactsFilterTag" :key="contact.id">
+        <tr v-for="contact in filteredContacts" :key="contact.id">
           <td>{{ contact.name }}</td>
           <td>{{ contact.phone }}</td>
           <td>{{ contact.email }}</td>
@@ -87,15 +87,22 @@ export default {
       postfix.value = value
     }
 
-    const contactsFilterTag = computed(() => {
+    const filteredContacts = computed(() => {
+      const filteredByTag =
+        store.state.activeTag === 'all'
+          ? contacts
+          : contacts.filter((el: Contact) =>
+              el.tags.includes(store.state.activeTag)
+            )
 
-      if (store.state.activeTag === 'all') {
-        return contacts
-      } else {
-        return contacts.filter((el: Contact) =>
-          el.tags.includes(store.state.activeTag)
-        )
+      if (!store.state.searchValue) {
+        return filteredByTag
       }
+
+      const searchQuery = store.state.searchValue.toLowerCase()
+      return filteredByTag.filter((contact: Contact) =>
+        contact.name.toLowerCase().includes(searchQuery)
+      )
     })
 
     return {
@@ -107,7 +114,7 @@ export default {
       data,
       deleteContact,
       toggleModal,
-      contactsFilterTag,
+      filteredContacts,
     }
   },
 }
@@ -124,9 +131,11 @@ export default {
     background-color: var(--table-row-color);
     color: var(--text-color);
     border-collapse: collapse;
+    table-layout: auto;
 
     th,
     td {
+      width: 100px;
       padding: 10px;
       border: 1px solid var(--main-color);
       text-align: center;
